@@ -16,11 +16,11 @@ public class PageDAO {
     private final JdbcTemplate jdbcTemplate;
 
     public PageDTO findById(Long pageId) {
-        // 페이지 기본 정보 조회
-        String pageQuery = "SELECT * FROM pages WHERE id = ?";
-        PageDTO pageDTO = jdbcTemplate.queryForObject(pageQuery, new Object[]{pageId}, new PageMapper());
+        try {
+            // 페이지 기본 정보 조회
+            String pageQuery = "SELECT * FROM pages WHERE id = ?";
+            PageDTO pageDTO = jdbcTemplate.queryForObject(pageQuery, new Object[]{pageId}, new PageMapper());
 
-        if (pageDTO != null) {
             // 서브페이지 조회
             String subPagesQuery = "SELECT id, title FROM pages WHERE parent_id = ?";
             List<SubPageDTO> subPages = jdbcTemplate.query(subPagesQuery, new Object[]{pageId}, new SubPageMapper());
@@ -36,8 +36,11 @@ public class PageDAO {
                     "SELECT id, title FROM BreadcrumbHierarchy";
             List<SubPageDTO> breadcrumbs = jdbcTemplate.query(breadcrumbsQuery, new Object[]{pageId}, new SubPageMapper());
             pageDTO.setBreadcrumbs(breadcrumbs);
-        }
 
-        return pageDTO;
+            return pageDTO;
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 }

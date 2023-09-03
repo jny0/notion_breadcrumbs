@@ -1,6 +1,7 @@
 package com.notionbreadcrumbs.domain.page.controller;
 
 import com.notionbreadcrumbs.domain.page.dto.PageDTO;
+import com.notionbreadcrumbs.domain.page.exception.PageNotFoundException;
 import com.notionbreadcrumbs.domain.page.service.PageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class PageController {
     @GetMapping("/{id}")
     public ResponseEntity<PageDTO> getPage(@PathVariable Long id){
         PageDTO response = pageService.findById(id);
+        if(response == null) throw new PageNotFoundException();
         return ResponseEntity.ok(response);
     }
 
