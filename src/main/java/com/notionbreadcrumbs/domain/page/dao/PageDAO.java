@@ -33,7 +33,8 @@ public class PageDAO {
                     "SELECT p.id, p.title, p.parent_id FROM pages p " +
                     "INNER JOIN BreadcrumbHierarchy b ON p.id = b.parent_id" +
                     ")" +
-                    "SELECT id, title FROM BreadcrumbHierarchy";
+                    "SELECT id, title FROM BreadcrumbHierarchy " +
+                    "ORDER BY parent_id";
             List<SubPageDTO> breadcrumbs = jdbcTemplate.query(breadcrumbsQuery, new Object[]{pageId}, new SubPageMapper());
             pageDTO.setBreadcrumbs(breadcrumbs);
 
